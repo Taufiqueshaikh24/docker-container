@@ -1,0 +1,42 @@
+# No docker version cause its thorwing the error of obselete version: "3"
+services:
+  -app:
+    build: .
+    ports:
+      - 4444:4000
+    volumes:
+    # bind volume where localfoler path and container path
+      - ./:/app
+      # anonymus volums where the conatiner path needed
+      - /app/node_modules
+    env_file:
+      - ./.env
+  
+  mongo:
+    image: mongo:latest
+    volumes:
+    # named volume where the name of the volume and the folder name in the container
+      - mongo-db:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=username
+      - MONGO_INITDB_ROOT_PASSWORD=password
+
+
+      # mongosh -u "username" -p "password" --authenticationDatabase admin
+
+
+# if we name something as named volume we have to specify in volume  // volumes must be a mapping
+# decleration needed for the named volumes
+volumes:
+  mongo-db:
+
+
+# this is for shared docker compose file used in production or dev 
+
+# services:
+#   -app: 
+#     build: .
+#     ports:
+#       - "4444:4000"
+#     env_file:
+#       - ./.env
